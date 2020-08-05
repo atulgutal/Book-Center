@@ -3,12 +3,10 @@ import { Form, Button, Input, Divider, message } from "antd";
 import { withRouter } from "react-router-dom";
 import Icon from "@ant-design/icons";
 
-// import Header from "../Header/Header";
-
 class SignUp extends Component {
   state = {
     name: "",
-    useremail: "",
+    email: "",
     password: ""
   };
 
@@ -25,10 +23,20 @@ class SignUp extends Component {
   };
 
   render() {
-    const { name, useremail, password } = this.state;
+    const { name, email, password } = this.state;
     const { toggleForms } = this.props;
+
+    const validateMessages = {
+      required: "${name} is required!",
+      types: {
+        email: "${name} is not validate email!"
+      }
+    };
+
     return (
-      <div
+      <Form
+        name="nest-messages"
+        validateMessages={validateMessages}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -36,47 +44,65 @@ class SignUp extends Component {
           margin: "40px 30%"
         }}
       >
-        <Input
-          value={name}
-          onChange={this.handleChange}
+        <Form.Item
           name="name"
-          placeholder="name"
-          style={{ textAlign: "center", marginBottom: "20px" }}
-        />
-        <Input
-          value={useremail}
           onChange={this.handleChange}
-          name="useremail"
-          placeholder="email"
           rules={[
             {
-              type: "email"
+              required: true
             }
           ]}
-          style={{ textAlign: "center", marginBottom: "20px" }}
-        />
-        <Input
-          value={password}
-          type="password"
-          onChange={this.handleChange}
-          name="password"
-          placeholder="password"
-          style={{ textAlign: "center" }}
-        />
-        <Button
-          type="primary"
-          ghost
-          onClick={this.handleRegister}
-          style={{ marginTop: "20px" }}
         >
-          SignUp
-        </Button>
-        <Divider />
-        <p>Already have an account?</p>
-        <Button type="default" onClick={toggleForms}>
-          SignIn
-        </Button>
-      </div>
+          <Input name="name" value={name} placeholder="name" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          onChange={this.handleChange}
+          rules={[
+            {
+              type: "email",
+              required: true
+            }
+          ]}
+        >
+          <Input name="email" value={email} placeholder="email" />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          onChange={this.handleChange}
+          rules={[
+            {
+              required: true
+            }
+          ]}
+        >
+          <Input
+            name="password"
+            type="password"
+            value={password}
+            placeholder="password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            ghost
+            onClick={this.handleRegister}
+            style={{ marginTop: "20px", width: "100%" }}
+          >
+            SignUp
+          </Button>
+          <Divider />
+          <p>Already have an account?</p>
+          <Button
+            type="default"
+            onClick={toggleForms}
+            style={{ width: "100%" }}
+          >
+            SignIn
+          </Button>
+        </Form.Item>
+      </Form>
     );
   }
 }
