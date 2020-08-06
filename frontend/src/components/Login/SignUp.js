@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button, Input, Divider, message } from "antd";
 import { withRouter } from "react-router-dom";
-import Icon from "@ant-design/icons";
+import axios from "axios";
 
 class SignUp extends Component {
   state = {
@@ -11,15 +11,37 @@ class SignUp extends Component {
   };
 
   handleChange = e => {
-    console.log(e.target.name, e.target.value);
+    //console.log(e.target.name, e.target.value);
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
   handleRegister = () => {
-    console.log("handle register");
-    console.log(this.state);
+    //console.log(this.state);
+
+    const { name, email, password } = this.state;
+
+    let data = {
+      name,
+      email,
+      password
+    };
+
+    console.log(data);
+
+    axios({
+      method: "post",
+      url: "http://localhost:5001/signup",
+      data
+    })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        message.error("Please enter all the details!");
+        console.log(err);
+      });
   };
 
   render() {
