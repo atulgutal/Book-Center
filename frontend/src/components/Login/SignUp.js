@@ -32,7 +32,7 @@ class SignUp extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:5001/signup",
+      url: "/signup",
       data
     })
       .then(response => {

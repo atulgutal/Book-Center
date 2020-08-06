@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const auth_router = require("./services/auth");
-const port = process.env.PORT || 5001;
+const auth_router = require("./services/authservice");
+const port = process.env.PORT || 5002;
 const cors = require("cors");
+let routes = require("./routes/routes");
 //require('./db');
 
 app.use(bodyParser.json());
@@ -17,7 +18,8 @@ app.use(
   })
 );
 
-app.use("/", auth_router);
+app.use("/", routes);
+//app.use("/", auth_router);
 
 //app.use('/login', auth_router);
 
