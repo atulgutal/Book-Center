@@ -3,6 +3,6 @@ let authservice = require("../services/authservice");
 
 const router = express.Router();
 
-router.post("/signup", authservice.service.signup);
+router.post("/v1/users", authservice.service.signup);
 
 module.exports = router;

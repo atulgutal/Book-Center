@@ -2,10 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const auth_router = require("./services/authservice");
-const port = process.env.PORT || 5002;
+const port = process.env.PORT || 5004;
 const cors = require("cors");
 let routes = require("./routes/routes");
-//require('./db');
+require("./commons/db");
 
 app.use(bodyParser.json());
 app.use(cors());
