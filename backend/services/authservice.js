@@ -1,10 +1,13 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const rs = require("./../commons/responses");
+let pv = require("./../commons/passwordVerification");
+let jwt = require("./../commons/jwt");
 
 let service = {
   signup: async (req, res) => {
-    //console.log(req.body);
+    console.log(req.body);
     const salt = bcrypt.genSaltSync(saltRounds);
     const userpassword = bcrypt.hashSync(req.body.userpassword, salt);
 
@@ -35,15 +38,55 @@ let service = {
         message: "User register successfully",
         userId: userInfo._id
       });
-    } catch (e) {
+    } catch (error) {
       res.send({
-        e,
+        error,
         message: "User not register successfully"
       });
     }
   },
-  signin: (req, res) => {
-    console.log("auth router");
+  signin: async (req, res) => {
+    //console.log(req.body);
+    let useremail = req.body.useremail;
+    let userpassword = req.body.userpassword;
+    try {
+      const user = await User.findOne(
+        {
+          useremail: useremail
+        },
+        {
+          userpassword: 1
+        }
+      );
+      //console.log(user);
+      if (user == null) {
+        //console.log(user);
+        throw rs.signin;
+      } else {
+        const isMatch = await pv.verify(userpassword, user.userpassword);
+        //console.log(isMatch);
+        if (isMatch) {
+          res.json({
+            result: "success",
+            response: [
+              {
+                message: "User Signed In Successfully",
+                code: "SIGNIN"
+              }
+            ],
+            userId: user._id,
+            token: await jwt.generate({
+              payload: user
+            })
+          });
+        } else {
+          throw rs.signin;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.send(error);
+    }
     //console.log(req.body);
     // if (bcrypt.compareSync(req.body.userpassword, user.userpassword)) {
     //   console.log("same");

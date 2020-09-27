@@ -4,7 +4,7 @@ const app = express();
 const auth_router = require("./services/authservice");
 const port = process.env.PORT || 5004;
 const cors = require("cors");
-let routes = require("./routes/routes");
+let routes = require("./routes/routes")(express);
 require("./commons/db");
 
 app.use(bodyParser.json());
