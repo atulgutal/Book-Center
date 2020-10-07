@@ -30,19 +30,17 @@ let service = {
 
       if (user !== null) {
         //console.log(user);
-        return res.status(400).send("User already exists");
+        throw { statusCode: 400, message: "User already exists" };
       }
 
       const userInfo = await newUser.save();
-      res.status(200).send({
+      res.send({
+        statusCode: 200,
         message: "User register successfully",
         userId: userInfo._id
       });
     } catch (error) {
-      res.send({
-        error,
-        message: "User not register successfully"
-      });
+      res.send(error);
     }
   },
   signin: async (req, res) => {

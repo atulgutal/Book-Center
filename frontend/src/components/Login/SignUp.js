@@ -1,132 +1,188 @@
 import React, { Component } from "react";
-import { Form, Button, Input, Divider, message } from "antd";
+import { useState } from "react";
+import { Form, Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 
-class SignUp extends Component {
-  state = {
-    name: "",
-    email: "",
-    password: ""
-  };
+function SignUp({ signUptoggleForms }) {
+  const [form] = Form.useForm();
+  // const [firstname, setFirstname] = useState("");
+  // const [lastname, setLastname] = useState("");
+  // const [useremail, setUseremail] = useState("");
+  // const [userpassword, setUserpassword] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState(0);
+  // const [address, setAddress] = useState("");
+  // const [city, setCity] = useState("");
+  // const [country, setCountry] = useState("");
+  // const [zipcode, setZipcode] = useState("");
 
-  handleChange = e => {
-    //console.log(e.target.name, e.target.value);
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+  const onFinish = async values => {
+    //console.log("Received values of form: ", values);
 
-  handleRegister = () => {
-    //console.log(this.state);
-
-    const { name, email, password } = this.state;
-
-    let data = {
-      name,
-      email,
-      password
-    };
-
-    console.log(data);
-
-    axios({
-      method: "post",
-      url: "/signup",
-      data
-    })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(err => {
-        message.error("Please enter all the details!");
-        console.log(err);
-      });
-  };
-
-  render() {
-    const { name, email, password } = this.state;
-    const { toggleForms } = this.props;
-
-    const validateMessages = {
-      required: "${name} is required!",
-      types: {
-        email: "${name} is not validate email!"
+    try {
+      const res = await axios.post("/v1/signup", values);
+      console.log(res);
+      if (res.data.statusCode == 200) {
+        message.success(res.data.message);
+      } else {
+        message.error(res.data.message);
       }
-    };
-
-    return (
-      <Form
-        name="nest-messages"
-        validateMessages={validateMessages}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "40%",
-          margin: "40px 30%"
-        }}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <Form form={form} name="register" onFinish={onFinish}>
+      <Form.Item
+        name="firstname"
+        rules={[
+          {
+            required: true,
+            message: "Please input your firstname!"
+          }
+        ]}
       >
-        <Form.Item
-          name="name"
-          onChange={this.handleChange}
-          rules={[
-            {
-              required: true
-            }
-          ]}
-        >
-          <Input name="name" value={name} placeholder="name" />
-        </Form.Item>
-        <Form.Item
-          name="email"
-          onChange={this.handleChange}
-          rules={[
-            {
-              type: "email",
-              required: true
-            }
-          ]}
-        >
-          <Input name="email" value={email} placeholder="email" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          onChange={this.handleChange}
-          rules={[
-            {
-              required: true
-            }
-          ]}
-        >
-          <Input
-            name="password"
-            type="password"
-            value={password}
-            placeholder="password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            ghost
-            onClick={this.handleRegister}
-            style={{ marginTop: "20px", width: "100%" }}
-          >
-            SignUp
-          </Button>
-          <Divider />
-          <p>Already have an account?</p>
-          <Button
-            type="default"
-            onClick={toggleForms}
-            style={{ width: "100%" }}
-          >
-            SignIn
-          </Button>
-        </Form.Item>
-      </Form>
-    );
-  }
+        <Input
+          placeholder="firstname"
+          // value={firstname}
+          // onChange={e => setFirstname(e.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        name="lastname"
+        rules={[
+          {
+            required: true,
+            message: "Please input your lastname!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="lastname"
+          // value={lastname}
+          // onChange={e => setLastname(e.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        name="useremail"
+        rules={[
+          {
+            type: "email",
+            message: "The input is not valid E-mail!"
+          },
+          {
+            required: true,
+            message: "Please input your E-mail!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="email"
+          // value={useremail}
+          // onChange={e => setUseremail(e.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        name="userpassword"
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!"
+          }
+        ]}
+      >
+        <Input.Password
+          placeholder="password"
+          // value={userpassword}
+          // onChange={e => setUserpassword(e.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="phoneNumber"
+        rules={[
+          {
+            required: true,
+            message: "Please input your phone number!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="phone number"
+          // value={phoneNumber}
+          // onChange={e => setPhoneNumber(e.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="address"
+        rules={[
+          {
+            required: true,
+            message: "Please input your address!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="address"
+          // value={address}
+          // onChange={e => setAddress(e.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        name="city"
+        rules={[
+          {
+            required: true,
+            message: "Please input your city!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="city"
+          // value={city}
+          // onChange={e => setCity(e.target.value)}
+        />
+      </Form.Item>
+      <Form.Item
+        name="country"
+        rules={[
+          {
+            required: true,
+            message: "Please input your country!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="country"
+          // value={country}
+          // onChange={e => setCountry(e.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="zipcode"
+        rules={[
+          {
+            required: true,
+            message: "Please input your zipcode!"
+          }
+        ]}
+      >
+        <Input
+          placeholder="zipcode"
+          // value={zipcode}
+          // onChange={e => setZipcode(e.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Register
+        </Button>
+      </Form.Item>
+    </Form>
+  );
 }
 
 export default withRouter(SignUp);
