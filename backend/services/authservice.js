@@ -40,7 +40,7 @@ let service = {
         userId: userInfo._id
       });
     } catch (error) {
-      res.send(error);
+      res.status(400).send(error);
     }
   },
   signin: async (req, res) => {
